@@ -1,9 +1,6 @@
 export default function Recip({receta}){
     return <div>
-        <ul>
-            <li>{receta.title}</li>
-            <li>{receta.summary}</li>
-        </ul>
-        
-    </div>
+            <p>{receta.title}</p>
+            <img src={receta.image} alt='Imagen no encontrada' />
+   </div>
 }

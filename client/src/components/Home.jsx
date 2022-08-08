@@ -1,25 +1,18 @@
 import React from "react"
 import { connect } from "react-redux"
 import Recipes from "./Recipes"
+import Nav from "./Nav"
 import { useEffect } from "react"
 import { getAllRecipes } from "../actions/action"
 
 export function Home(props){
-    return <div>(
+    return <div>
         {useEffect(() => {
             props.getAllRecipes() 
             console.log("this component has been mounted");
 }, [])}
-         {/*
-        <Buscador />
-        <Filtros />
-        <Ordenamientos />
-        */
-       console.log(props)
-       } 
-        <Recipes recetas={props.recipes}/>
-        )
-   
+    <Nav />
+    <Recipes recetas={props.recipes}/>   
     </div>
 
 }

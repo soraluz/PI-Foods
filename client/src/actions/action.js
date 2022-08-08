@@ -1,5 +1,5 @@
 export function getAllRecipes(){
-    console.log("Ingreso a la funcion getAllRecipes")
+    
     return (dispatch)=>{
         return fetch("http://localhost:3001/recipes")
         .then(r=>r.json())
@@ -8,6 +8,22 @@ export function getAllRecipes(){
             payload:data
         }))
         .catch(e=>console.log('error',e))
+    }
+}
+
+export function searchRecipes(recipe){
+    
+    return (dispatch)=>{
+        return fetch(`http://localhost:3001/recipes?name=${recipe}`)
+        .then(r=>r.json())
+        .then(data=> {
+            console.log('data devuelta de json',data)
+            dispatch({
+            type: 'GET_ALL_RECIPES',
+            payload:data
+        })
+        })
+        .catch(e=>'Datos no encontrados')
     }
 }
 

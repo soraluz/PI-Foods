@@ -15,9 +15,11 @@ const router = Router();
 
 router.get('/recipes', async function(req,res){
 const {name}= req.query
+
      try{
           if(name){
-          const resultado= await  axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true`)
+          const resultado= await  axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
+   
           const filtro= resultado.data.results.map(receta=>{
 
                    return {
@@ -27,14 +29,27 @@ const {name}= req.query
                    }).filter((receta)=>{
                          return receta.title.toLowerCase().includes(name.toLowerCase())
                    })
-               console.log(filtro)      
           
               if(filtro.length) {
                     res.json(filtro)                  
                }
-               else res.send('No se encontraron resultados con el nombre de receta ingresado')
+               else{ res.send('No se encontraron resultados con el nombre de receta ingresado')}
           }
-          else res.send('Debe pasa por parametro el nombre a buscar')
+          else {
+               const resultado= await  axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
+               const filtro= resultado.data.results.map(receta=>{
+
+                   return {
+                            title:receta.title,
+                            image:receta.image
+                   } 
+                   })
+
+              if(filtro.length) {
+                    res.json(filtro)                  
+               }
+               else{ res.send('No se encontraron resultados con el nombre de receta ingresado')}
+          }
      }
     catch(e){
      console.log(e)
