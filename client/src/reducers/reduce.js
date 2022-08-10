@@ -8,6 +8,7 @@ const initialState={
 export default function reducer(state=initialState,action){
     switch(action.type){
         case 'GET_ALL_RECIPES':
+
             return {
                 ...state,
                 recipes:action.payload
@@ -46,7 +47,12 @@ export default function reducer(state=initialState,action){
             return{
                 ...state,
                 filtro:state.recipes.filter(recipe=>{ 
-                    return recipe.diets?.includes(action.payload)
+                    return recipe.diets?.includes(action.payload)|| 
+                            recipe.vegetarian && action.payload=='vegetarian' ||
+                            recipe.vegan && action.payload=='vegan' ||
+                            recipe.glutenFree && action.payload=='gluten free' ||
+                            recipe.dairyFree && action.payload=='dairy free' 
+
                 }),
                 busqueda:[]
             }
