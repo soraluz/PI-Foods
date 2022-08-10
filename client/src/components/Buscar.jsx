@@ -4,9 +4,12 @@ import { searchRecipes } from "../actions/action"
 export function Buscar({searchRecipes}){
     function handledSubmit(e){
         e.preventDefault();
-        let query=document.querySelector('input[name=query]').value
-        console.log('query ingresado en el input',query)
-        searchRecipes(query)
+        let query=document.querySelector('input[name=query]')
+        if(query.value){
+            searchRecipes(query.value)
+            query.value=""
+        } 
+        else return "Debe completar el campo"    
     }
        
     return <div>

@@ -37,8 +37,8 @@ export default function Form_Recipe(){
 
     function handleSubmit(e){
         e.preventDefault()
-       
         dispatch(createRecipe(input))
+        
       }
     function handleChange(e) {
        setInput({

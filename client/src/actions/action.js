@@ -7,23 +7,27 @@ export function getAllRecipes(){
             type: 'GET_ALL_RECIPES',
             payload:data
         }))
-        .catch(e=>console.log('error',e))
+        .catch(e=>'Datos no encontrados')
     }
 }
 
 export function searchRecipes(recipe){
     
-    return (dispatch)=>{
-        return fetch(`http://localhost:3001/recipes?name=${recipe}`)
-        .then(r=>r.json())
-        .then(data=> {
-            console.log('data devuelta de json',data)
-            dispatch({
-            type: 'GET_ALL_RECIPES',
-            payload:data
-        })
-        })
-        .catch(e=>'Datos no encontrados')
+    //return (dispatch)=>{
+        //return fetch(`http://localhost:3001/recipes?name=${recipe}`)
+        //.then(r=>r.json())
+        //.then(data=> {
+       return {
+            type: 'SEARCH_RECIPES',
+            payload:recipe
+        }        
+}
+
+export function filterRecipes(data){
+    
+    return {
+        type: 'FILTER_RECIPES',
+        payload:data
     }
 }
 
@@ -38,6 +42,16 @@ export function getDetailRecipe(){
     }
 }
 
+export function getAllDiets(){
+    return (dispatch)=>{
+        return fetch('http://localhost:3001/diets')
+        .then(r=>r.json())
+        .then(data=> dispatch({
+            type: 'GET_ALL_DIETS',
+            payload:data
+        }))
+    }
+}
 export function createRecipe(data){
     return (dispatch)=>{
         console.log(data)

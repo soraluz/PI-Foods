@@ -7,7 +7,6 @@ const {
      API_KEY,
    } = process.env;
 
-
 const router = Router();
 
 // Configurar los routers
@@ -16,17 +15,35 @@ const router = Router();
 router.get('/recipes', async function(req,res){
 const {name}= req.query
 
-     try{
-          if(name){
-          const resultado= await  axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
+     try{         
+          let resultado;
+          let api= await  axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=10`)
    
-          const filtro= resultado.data.results.map(receta=>{
+          api= api.data.results.map(receta=>{
 
                    return {
                             title:receta.title,
-                            image:receta.image
+                            image:receta.image,
+                            diets:receta.diets,
+                            vegetarian:receta.vegetarian,
+                            vegan:receta.vegan,
+                            glutenFree:receta.glutenFree,
+                            dairyFree:receta.dairyFree
                    } 
-                   }).filter((receta)=>{
+                   })
+          let bd=await Recipe.findAll()
+          bd=bd.map(receta=>{
+               return {
+                    title:receta.name,
+                    //image:receta.image
+                   // diets:receta.diets
+               }
+          })
+          resultado=api.concat(bd)
+               //Si se envia query
+               if(name){
+               
+               const filtro=resultado.filter((receta)=>{
                          return receta.title.toLowerCase().includes(name.toLowerCase())
                    })
           
@@ -36,23 +53,15 @@ const {name}= req.query
                else{ res.send('No se encontraron resultados con el nombre de receta ingresado')}
           }
           else {
-               const resultado= await  axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
-               const filtro= resultado.data.results.map(receta=>{
-
-                   return {
-                            title:receta.title,
-                            image:receta.image
-                   } 
-                   })
-
-              if(filtro.length) {
-                    res.json(filtro)                  
-               }
+               //Envio todos los resultados
+              if(resultado){
+               res.json(resultado)
+              }
                else{ res.send('No se encontraron resultados con el nombre de receta ingresado')}
           }
      }
     catch(e){
-     console.log(e)
+     res.send("Error en los datos")
     }
 })
 
@@ -60,23 +69,23 @@ router.get('/recipes/:idReceta',async function(req,res){
      const {idReceta}=req.params
      //ejem idReceta=716429, 715538
      try{
-               const resultado= axios.get(`https://api.spoonacular.com/recipes/${idReceta}/information?apiKey=${API_KEY}`)
-               const filtro=r.data.map((r)=>{
+               const resultado=await axios.get(`https://api.spoonacular.com/recipes/${idReceta}/information?apiKey=${API_KEY}`)
+               const filtro=resultado.data.map((r)=>{
                     return {
                          image:r.image,
                          title:r.title,
-                         dishTypes:dishTypes,
-                         diets:diets,
-                         summary:summary,
-                         healthScore:healthScore,
-                         steps:instructions
+                         dishTypes:r.dishTypes,
+                         diets:r.diets,
+                         summary:r.summary,
+                         healthScore:r.healthScore,
+                         steps:r.instructions
                     }
                })
                if(resultado) res.json(filtro)
-               else console.log('Id invalida')
+               else res.send("No se encontraron resultados con el ID enviado")
            
      }catch(e){
-          console.log('Error',e)
+          res.send("Error en alguno de los datos")
      }
     
 
@@ -107,17 +116,18 @@ router.get('/diets',async function(req,res){
           if(!dietas.length){
                //buscar api
               await Diet.bulkCreate([
-                    {name:"Gluten Free"},
-                    {name: "Ketogenic"},
-                    {name: "Vegetarian"},
-                    {name: "Lacto-Vegetarian"},
-                    {name: "Ovo-Vegatarian"},
-                    {name: "Vegan"},
-                    {name: "Pescetarian"},
-                    {name: "Paleo"},
-                    {name: "Primal"},
-                    {name: "Low FODMAP"},
-                    {name: "Whole30"}              
+                    {name:"gluten free"},
+                    {name:"dairy free"},
+                    {name: "lacto ovo vegetarian"},
+                    {name: "vegetarian"},
+                    {name: "vegan"},
+                    {name: "paleolithic"},
+                    {name: "primal"},
+                    {name: "whole 30"},
+                    {name: "pescatarian"},
+                    {name: "ketogenic"},    
+                    {name: "fodmap friendly"}                     
+                  
                ])
                res.json(dietas)
           }
