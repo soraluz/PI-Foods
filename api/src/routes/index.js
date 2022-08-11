@@ -17,7 +17,7 @@ const {name}= req.query
 
      try{         
           let resultado;
-          let api= await  axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=10`)
+          let api= await  axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
    
           api= api.data.results.map(receta=>{
 

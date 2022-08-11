@@ -31,6 +31,22 @@ export function filterRecipes(data){
     }
 }
 
+export function sortRecipesAsc(campo){
+    console.log(campo)
+    return {
+        type: 'SORT_RECIPES_ASC',
+        payload:campo
+    }
+}
+
+export function sortRecipesDesc(campo){
+    
+    return {
+        type: 'SORT_RECIPES_DESC',
+        payload:campo
+    }
+}
+
 export function getDetailRecipe(){
     return (dispatch)=>{
         return fetch('')

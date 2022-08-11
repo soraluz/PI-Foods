@@ -1,12 +1,13 @@
 import { useEffect } from "react"
-import { filterRecipes, getAllDiets } from "../actions/action"
+import { filterRecipes, getAllDiets,getAllRecipes } from "../actions/action"
 import { connect } from "react-redux"
 
 export function Filtrar(props){
 
     function handledSelect(e){
         e.preventDefault()
-        props.filterRecipes(e.target.value)
+        if(e.target.value=='todos') props.getAllRecipes()
+        else props.filterRecipes(e.target.value)
     }
     return <div>
     {useEffect(() => {
@@ -14,7 +15,7 @@ export function Filtrar(props){
 }, [])}
             <label>Tipo de Dieta</label>
             <select name="diet" onChange={(e)=>handledSelect(e)}>
-                <option>todos</option>
+                <option value='todos'>todos</option>
                 {props.diets.map((diet)=>{
                 return <option value={diet.name}>{diet.name}</option>
             })}
@@ -31,7 +32,8 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return{
         getAllDiets:()=>dispatch(getAllDiets()),
-        filterRecipes:(data)=>dispatch(filterRecipes(data))
+        filterRecipes:(data)=>dispatch(filterRecipes(data)),
+        getAllRecipes:()=>dispatch(getAllRecipes())
     }
 }
 

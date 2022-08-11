@@ -2,6 +2,8 @@ const initialState={
     recipes:[],
     filtro:[],
     busqueda:[],
+    ordenAsc:[],
+    ordenDesc:[],
     detail:{},
     diets:[]
 }
@@ -11,27 +13,13 @@ export default function reducer(state=initialState,action){
 
             return {
                 ...state,
-                recipes:action.payload
+                recipes:action.payload,
+                filtro:action.payload,
+                busqueda:[],
+                ordenAsc:[],
+                ordenDesc:[]
             }
-
-        case 'SEARCH_RECIPES':
-            if(state.filtro.length){
-                return{
-                    ...state,
-                    busqueda:state.filtro.filter(recipe=>{ 
-                    return recipe.title.toLowerCase().includes(action.payload.toLowerCase())
-                    })
-                }                
-            }
-            else
-            return{
-                    ...state,
-                    busqueda:state.recipes.filter(recipe=>{ 
-                    return recipe.title.toLowerCase().includes(action.payload.toLowerCase())
-                    })
-    
-                }
-                      
+                              
         case 'GET_DETAIL_RECIPE':
             return{
                 ...state,
@@ -42,6 +30,19 @@ export default function reducer(state=initialState,action){
                 ...state,
                 diets:action.payload
             }
+
+        case 'SEARCH_RECIPES':
+             
+                 return{
+                       ...state,
+                        busqueda:state.filtro.filter(recipe=>{ 
+                            return recipe.title.toLowerCase().includes(action.payload.toLowerCase())
+                        }),
+                        ordenAsc:[],
+                        ordenDesc:[]
+                    }    
+                            
+
         case 'FILTER_RECIPES':
             
             return{
@@ -54,8 +55,45 @@ export default function reducer(state=initialState,action){
                             recipe.dairyFree && action.payload=='dairy free' 
 
                 }),
-                busqueda:[]
+                busqueda:[],
+                ordenAsc:[],
+                ordenDesc:[]
             }
+
+        case 'SORT_RECIPES_ASC':
+        return{
+                    ...state,
+                    ordenAsc: state.filtro.sort((a,b)=>{
+                        if (a.title < b.title) {
+                            return -1;
+                          }
+                          if (a.title > b.title) {
+                            return 1;
+                          }
+                          // a must be equal to b
+                          return 0;
+                    }),
+                    ordenDesc:[]
+    
+        }
+
+        case 'SORT_RECIPES_DESC':
+            return{
+                ...state,
+                ordenDesc: state.filtro.sort((a,b)=>{
+                    if (a.title > b.title) {
+                        return -1;
+                      }
+                      if (a.title < b.title) {
+                        return 1;
+                      }
+                      // a must be equal to b
+                      return 0;
+                }),
+                ordenAsc:[]
+
+            }
+
         case 'CREATE_RECIPE':
             return{
                 ...state,
