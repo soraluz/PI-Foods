@@ -24,12 +24,13 @@ export function validate(input){
     }
 return errors;
 }
-export default function Form_Recipe(){
+export default function Form_Recipe(props){
     const [input,setInput]=React.useState({
         name:'',
         summary:'',
         healthScore:'',
-        steps:''
+        steps:'',
+        diets:[]
     })
     const [errors,setErrors]=React.useState({});
 
@@ -38,8 +39,9 @@ export default function Form_Recipe(){
     function handleSubmit(e){
         e.preventDefault()
         dispatch(createRecipe(input))
-        
-      }
+        console.log(props.history)
+        props.history.goBack()
+    }
     function handleChange(e) {
        setInput({
         ...input,
@@ -49,8 +51,25 @@ export default function Form_Recipe(){
         ...input,[e.target.name]:e.target.value
       }))     
     }
+    function hanledCheck(e){
+        if(e.target.checked){
+            setInput({
+                ...input,
+                diets:input.diets.concat(e.target.id)
+            })
+        }
+        else{
+            setInput({
+                ...input,
+                diets:input.diets.filter((dieta)=>{
+                    return dieta!==e.target.id
+                })
+            })
+        }
+    }
+    
     return <div>
-        <form onSubmit={(e)=>handleSubmit(e)}>
+            <form onSubmit={(e)=>handleSubmit(e)}>
             <label>Name: </label>
             <input type='text' name='name' value={input.name} onChange={(e)=>handleChange(e)} />
             <p>{errors.name}</p>
@@ -63,6 +82,19 @@ export default function Form_Recipe(){
             <label>Paso a Paso: </label>
             <input type='text' name='steps' value={input.steps} onChange={(e)=>handleChange(e)} />
             <p>{errors.steps}</p>
+            <p>Tipos de Dietas:</p>
+            <input type="checkbox" id="1" value='gluten free' onClick={(e)=>hanledCheck(e)} />gluten free
+            <input type="checkbox" id="2" value='dairy free' onClick={(e)=>hanledCheck(e)} />dairy free
+            <input type="checkbox" id="3" value='lacto ovo vegetarian' onClick={(e)=>hanledCheck(e)} />lacto ovo vegetarian
+            <input type="checkbox" id="4" value='vegetarian' onClick={(e)=>hanledCheck(e)} />vegetarian
+            <input type="checkbox" id="5" value='vegan' onClick={(e)=>hanledCheck(e)} />vegan
+            <input type="checkbox" id="6" value='paleolithic' onClick={(e)=>hanledCheck(e)} />paleolithic
+            <input type="checkbox" id="7" value='primal' onClick={(e)=>hanledCheck(e)} />primal
+            <input type="checkbox" id="8" value='whole 30' onClick={(e)=>hanledCheck(e)} />whole 30
+            <input type="checkbox" id="9" value='pescatarian' onClick={(e)=>hanledCheck(e)} />pescatarian
+            <input type="checkbox" id="10" value='ketogenic' onClick={(e)=>hanledCheck(e)} />ketogenic
+            <input type="checkbox" id="11" value='fodmap friendly' onClick={(e)=>hanledCheck(e)} />fodmap friendly
+            <br />
             <button>Enviar Datos</button>
         </form>
     </div>

@@ -1,4 +1,6 @@
 import React from "react"
+import { NavLink } from "react-router-dom"
+
 export default function Recip({receta}){
     if(receta.diets){
         var tipos=new Set([...receta.diets])
@@ -13,12 +15,18 @@ export default function Recip({receta}){
     if (receta.dairyFree) tipos.add('dairy free')
     let arreglo=[...tipos]
         
-    return <div>
-        <h1>{receta.title}</h1>
-        {receta.image ? <img src={receta.image} alt='Imagen no encontrada' />:null
-        }
-         { arreglo?.map(tipo=>{
+    return <>
+       <NavLink to={`/recipes/${receta.id}`}>
+        <div>
+         <h2>{receta.title}</h2>
+            {receta.image ? <img src={receta.image} alt='Imagen no encontrada' />:null
+            }
+             { arreglo?.map(tipo=>{
                     return <p>{tipo}</p>
             })} 
-   </div>
+            {receta.healthScore?<p>{receta.healthScore}</p>:null}
+        </div>
+        </NavLink>
+        
+   </>
 }

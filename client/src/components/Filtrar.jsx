@@ -8,6 +8,7 @@ export function Filtrar(props){
         e.preventDefault()
         if(e.target.value=='todos') props.getAllRecipes()
         else props.filterRecipes(e.target.value)
+        e.target.value='todos'
     }
     return <div>
     {useEffect(() => {

@@ -1,5 +1,5 @@
 export function getAllRecipes(){
-    
+   
     return (dispatch)=>{
         return fetch("http://localhost:3001/recipes")
         .then(r=>r.json())
@@ -12,15 +12,16 @@ export function getAllRecipes(){
 }
 
 export function searchRecipes(recipe){
-    
-    //return (dispatch)=>{
-        //return fetch(`http://localhost:3001/recipes?name=${recipe}`)
-        //.then(r=>r.json())
-        //.then(data=> {
-       return {
+    console.log('recipe a buscar',recipe)
+    return (dispatch)=>{
+        return fetch(`http://localhost:3001/recipes?name=${recipe}`)
+        .then(r=>r.json())
+        .then(data=> dispatch({
             type: 'SEARCH_RECIPES',
-            payload:recipe
-        }        
+            payload:data
+        }))
+        .catch(e=>'Datos no encontrados')   
+    }
 }
 
 export function filterRecipes(data){
@@ -47,9 +48,10 @@ export function sortRecipesDesc(campo){
     }
 }
 
-export function getDetailRecipe(){
+export function getDetailRecipe(id){
+    console.log('Ingreso a la action detalle con id',id)
     return (dispatch)=>{
-        return fetch('')
+        return fetch(`http://localhost:3001/recipes/${id}`)
         .then(r=>r.json())
         .then(data=> dispatch({
             type: 'GET_DETAIL_RECIPE',

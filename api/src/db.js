@@ -30,7 +30,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-console.log(sequelize.models)
+
 const { Recipe, Diet } = sequelize.models;
 console.log('Recipe',Recipe)
 // Aca vendrian las relaciones

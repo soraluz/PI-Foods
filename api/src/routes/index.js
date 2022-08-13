@@ -17,13 +17,15 @@ const {name}= req.query
 
      try{         
           let resultado;
-          let api= await  axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
-   
+          let api= await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=10`)
           api= api.data.results.map(receta=>{
-
+              
                    return {
+                           
+                            id:receta.id,
                             title:receta.title,
                             image:receta.image,
+                            healthScore:receta.healthScore,
                             diets:receta.diets,
                             vegetarian:receta.vegetarian,
                             vegan:receta.vegan,
@@ -32,11 +34,12 @@ const {name}= req.query
                    } 
                    })
           let bd=await Recipe.findAll()
-          bd=bd.map(receta=>{
+          bd=bd?.map(receta=>{
                return {
+                    id:receta.id,
                     title:receta.name,
                     //image:receta.image
-                   // diets:receta.diets
+                    diets:receta.diets
                }
           })
           resultado=api.concat(bd)
@@ -61,38 +64,61 @@ const {name}= req.query
           }
      }
     catch(e){
-     res.send("Error en los datos")
+     res.redirect('/error')
     }
 })
 
 router.get('/recipes/:idReceta',async function(req,res){
      const {idReceta}=req.params
+     console.log('id',idReceta)
      //ejem idReceta=716429, 715538
-     try{
-               const resultado=await axios.get(`https://api.spoonacular.com/recipes/${idReceta}/information?apiKey=${API_KEY}`)
-               const filtro=resultado.data.map((r)=>{
-                    return {
-                         image:r.image,
-                         title:r.title,
-                         dishTypes:r.dishTypes,
-                         diets:r.diets,
-                         summary:r.summary,
-                         healthScore:r.healthScore,
-                         steps:r.instructions
-                    }
-               })
-               if(resultado) res.json(filtro)
-               else res.send("No se encontraron resultados con el ID enviado")
-           
-     }catch(e){
-          res.send("Error en alguno de los datos")
-     }
-    
+     try{     
+         //Buscamos en la Api
+         if(idReceta.includes('-')){
 
+          console.log('entro BD')
+          const result=await Recipe.findByPk(idReceta)
+         
+          if(result){
+               
+               const resultadoBD=await Recipe.findOne({
+                    where:{
+                         id:idReceta
+                    },include:Diet})
+                    console.log(resultadoBD.toJSON())
+               return res.json(resultadoBD)
+               }
+         
+          }
+                    
+          else{      //Buscamos en la Base de Datos    
+               
+               console.log("Ingresamos a la API")
+               const resultadoApi=await axios.get(`https://api.spoonacular.com/recipes/${idReceta}/information?apiKey=${API_KEY}`)
+               console.log('resultadoApi',resultadoApi.data)
+                         const receta= {
+                              image:resultadoApi.data.image,
+                              title:resultadoApi.data.title,
+                              dishTypes:resultadoApi.data.dishTypes,
+                              summary:resultadoApi.data.summary,
+                              healthScore:resultadoApi.data.healthScore,
+                              steps:resultadoApi.data.instructions,
+                              diets:resultadoApi.data.diets,
+                              vegetarian:resultadoApi.data.vegetarian,
+                              vegan:resultadoApi.data.vegan,
+                              glutenFree:resultadoApi.data.glutenFree,
+                              dairyFree:resultadoApi.data.dairyFree
+                         }
+                         res.json(receta)
+               }
+     }catch(e){
+          res.send("No se encontraron los datos con el ID enviado")
+     }
 })
 
 router.post('/recipes', async function(req,res){
-     const {name, summary, healthScore,steps}=req.body;
+     const {name, summary, healthScore,steps,diets}=req.body;
+     console.log(diets)
 
      try{
           if(!name || !summary) return res.status(404).send("Falta enviar datos que son neesarios")
@@ -103,9 +129,11 @@ router.post('/recipes', async function(req,res){
                healthScore:healthScore,
                steps:steps
           })
+          receta.addDiet(diets)
+          
           res.status(201).json(receta)
      }catch(e){
-          res.status(404).send("Error en alguno de los datos provistos")
+          res.redirect('/home')
      }    
 
 })
@@ -133,9 +161,11 @@ router.get('/diets',async function(req,res){
           }
           else res.json(dietas)
      }catch(e){
-          res.status(404).send("Error en alguno de los datos provistos")
+          res.redirect('/home')
      }
-    
+})
+router.get('*',function(req,res){
+     res.send("Esta ruta no existe")
 })
 
 module.exports = router;

@@ -5,39 +5,40 @@ const initialState={
     ordenAsc:[],
     ordenDesc:[],
     detail:{},
-    diets:[]
+    diets:[],
+    loading:true
 }
 export default function reducer(state=initialState,action){
     switch(action.type){
         case 'GET_ALL_RECIPES':
-
+        console.log('ingreso al reducer',action.payload)
             return {
                 ...state,
                 recipes:action.payload,
                 filtro:action.payload,
                 busqueda:[],
                 ordenAsc:[],
-                ordenDesc:[]
+                ordenDesc:[],
+                loading:false
             }
                               
         case 'GET_DETAIL_RECIPE':
+            console.log('Ingreso al reduce de detalle',action.payload)
             return{
                 ...state,
                 detail:action.payload
             }
         case 'GET_ALL_DIETS':
-            return{
+              return{
                 ...state,
                 diets:action.payload
             }
 
         case 'SEARCH_RECIPES':
-             
+             console.log('action.payload',action.payload)
                  return{
                        ...state,
-                        busqueda:state.filtro.filter(recipe=>{ 
-                            return recipe.title.toLowerCase().includes(action.payload.toLowerCase())
-                        }),
+                        busqueda:action.payload,
                         ordenAsc:[],
                         ordenDesc:[]
                     }    
@@ -61,7 +62,8 @@ export default function reducer(state=initialState,action){
             }
 
         case 'SORT_RECIPES_ASC':
-        return{
+            if(action.payload=='Nombre'){
+                return{
                     ...state,
                     ordenAsc: state.filtro.sort((a,b)=>{
                         if (a.title < b.title) {
@@ -74,11 +76,30 @@ export default function reducer(state=initialState,action){
                           return 0;
                     }),
                     ordenDesc:[]
-    
-        }
+                }
+            }
+            else if(action.payload=='Health Score'){
+                
+                return{
+                    ...state,
+                    ordenAsc: state.filtro.sort((a,b)=>{
+                        if (a.healthScore < b.healthScore) {
+                            return -1;
+                          }
+                          if (a.healthScore > b.healthScore) {
+                            return 1;
+                          }
+                          // a must be equal to b
+                          return 0;
+                    }),
+                    ordenDesc:[]
+                }
+            }
+        
 
         case 'SORT_RECIPES_DESC':
-            return{
+            if(action.payload=='Nombre'){
+             return{
                 ...state,
                 ordenDesc: state.filtro.sort((a,b)=>{
                     if (a.title > b.title) {
@@ -92,12 +113,30 @@ export default function reducer(state=initialState,action){
                 }),
                 ordenAsc:[]
 
+             }
+          }
+          else if(action.payload=='Health Score'){
+            return{
+                ...state,
+                ordenDesc: state.filtro.sort((a,b)=>{
+                    if (a.healthScore > b.healthScore) {
+                        return -1;
+                      }
+                      if (a.healthScore < b.healthScore) {
+                        return 1;
+                      }
+                      // a must be equal to b
+                      return 0;
+                }),
+                ordenAsc:[]
             }
+          }
 
         case 'CREATE_RECIPE':
             return{
                 ...state,
                 recipes:state.recipes.concat(action.payload)
+
             }
         default: return state
     }

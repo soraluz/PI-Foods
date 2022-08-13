@@ -1,5 +1,8 @@
+import React from 'react';
 import Recip from './Recip'
+
 export default function Recipes({recetas}){
+
     return <div>
     {
     recetas?.map((receta)=>{

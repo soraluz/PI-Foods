@@ -5,15 +5,20 @@ import { useEffect } from "react"
 import { getAllRecipes } from "../actions/action"
 
 export function Home(props){
+   
     return <div>
+        
         {useEffect(() => {
-            props.getAllRecipes() 
-}, [])}
+            
+            props.getAllRecipes()
+        }, [])}
+        
+   {props.loading ? 'loading...' :null  }
    {props.ordenAsc.length?<Recipes recetas={props.ordenAsc}/>:
     props.ordenDesc.length?<Recipes recetas={props.ordenDesc}/>:
     props.busqueda.length?<Recipes recetas={props.busqueda}/>:
     props.filtro.length?<Recipes recetas={props.filtro}/>:null
-   }
+}
     </div>
 }
 function mapStateToProps(state){
@@ -22,7 +27,8 @@ function mapStateToProps(state){
         filtro:state.filtro,
         busqueda:state.busqueda,
         ordenAsc:state.ordenAsc,
-        ordenDesc:state.ordenDesc
+        ordenDesc:state.ordenDesc,
+        loading:state.loading
     }
 }
 function mapDispatchToProps(dispatch){
