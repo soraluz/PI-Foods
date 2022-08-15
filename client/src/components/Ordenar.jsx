@@ -1,5 +1,6 @@
 import { sortRecipesAsc,sortRecipesDesc } from "../actions/action"
 import { connect } from "react-redux"
+import '../Styles/Ordenar.css'
 
 export function Ordenar(props){
     function hanledSelect(e){
@@ -15,7 +16,7 @@ export function Ordenar(props){
         else if(e.target.name=='Health Score') e.target.value='Ordenar X Healh Score'
         
     }
-    return <div>
+    return <div className="ordenar">
        <select name="Nombre" onChange={(e)=>hanledSelect(e)}>
            <option value='Ordenar X Nombre'>Ordenar X Nombre</option>
            <option value='Ascendente'>Ascendente</option>

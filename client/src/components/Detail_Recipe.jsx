@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { connect } from "react-redux"
 import { getDetailRecipe } from "../actions/action"
+import '../Styles/Detail_Recipe.css'
 
 export function Detail_Recipe(props){
     
@@ -24,18 +25,17 @@ export function Detail_Recipe(props){
     if (props.detail.dairyFree) tipos.add('dairy free')
     let arreglo=[...tipos]
         
-    return <>
-      
-        <div>
+    return <div className="detail">
          <h2>{props.detail.title}</h2>
             {props.detail.image ? <img src={props.detail.image} alt='Imagen no encontrada' />:null}
             <p>{props.detail.dishTypes}</p>
             <p>{props.detail.summary}</p>
+            <div>
             { arreglo?.map(tipo=>{
                     return <p>{tipo}</p>
             })} 
-        </div>        
-   </>
+            </div> 
+        </div>    
 }
 function mapStateToProps(state){
     return{

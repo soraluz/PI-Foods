@@ -16,13 +16,15 @@ function App() {
         <Nav />
         <Home />
       </Route>
-      <Route path="/recipes/:id" component={Detail_Recipe} />
+      <Route path="/recipes/create" component={Form_Recipe} />
+      
+      <Route path="/recipe/:id" component={Detail_Recipe} />
       
       <Route path="/error">
         <Error />
       </Route>
 
-      <Route path="/recipes/create" component={Form_Recipe} />
+     
     </div>
 }
 

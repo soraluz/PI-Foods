@@ -2,9 +2,10 @@ import Buscar from './Buscar.jsx'
 import Ordenar from './Ordenar.jsx'
 import Filtrar from './Filtrar.jsx'
 import { NavLink } from 'react-router-dom'
+import '../Styles/Nav.css'
 
 export default function Nav(){
-    return <div>
+    return <div className='nav'>
         <Buscar />
         <Filtrar />
         <Ordenar />

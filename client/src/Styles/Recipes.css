@@ -1,0 +1,17 @@
+.recipes{
+    display:flex;
+    flex-direction:column;
+}
+.home{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    flex-wrap: wrap;
+
+}
+.paginado{
+    flex: flex;
+   flex-direction: row;
+    justify-content:space-around;
+    flex-wrap: wrap;
+}

@@ -1,6 +1,6 @@
 import { connect } from "react-redux"
 import { searchRecipes } from "../actions/action"
-
+import '../Styles/Buscar.css'
 export function Buscar({searchRecipes}){
     function handledSubmit(e){
         e.preventDefault();
@@ -12,8 +12,9 @@ export function Buscar({searchRecipes}){
         else return "Debe completar el campo"    
     }
        
-    return <div>
-       Buscar: <input type="text" name="query" placeholder="Ingrese el nombre del plato a Buscar" /> 
+    return <div className="buscar">
+        <label>Buscar :</label>
+       <input type="text" name="query" placeholder="Ingrese el nombre del plato a Buscar" /> 
        <button name="buscar" onClick={(e)=>handledSubmit(e)}>Buscar</button>
     </div>
 }

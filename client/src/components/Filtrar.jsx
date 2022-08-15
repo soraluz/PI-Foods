@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { filterRecipes, getAllDiets,getAllRecipes } from "../actions/action"
 import { connect } from "react-redux"
+import '../Styles/Filtrar.css'
 
 export function Filtrar(props){
 
@@ -8,9 +9,9 @@ export function Filtrar(props){
         e.preventDefault()
         if(e.target.value=='todos') props.getAllRecipes()
         else props.filterRecipes(e.target.value)
-        e.target.value='todos'
+       
     }
-    return <div>
+    return <div className="filtrado">
     {useEffect(() => {
         props.getAllDiets() 
 }, [])}
@@ -20,8 +21,7 @@ export function Filtrar(props){
                 {props.diets.map((diet)=>{
                 return <option value={diet.name}>{diet.name}</option>
             })}
-          </select>
-         
+          </select>        
 
     </div>
 }

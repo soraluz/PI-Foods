@@ -11,6 +11,29 @@ export function getAllRecipes(){
     }
 }
 
+export function getDetailRecipe(id){
+    console.log('Ingreso a la action detalle con id',id)
+    return (dispatch)=>{
+        return fetch(`http://localhost:3001/recipes/${id}`)
+        .then(r=>r.json())
+        .then(data=> dispatch({
+            type: 'GET_DETAIL_RECIPE',
+            payload:data
+        }))
+    }
+}
+
+export function getAllDiets(){
+    return (dispatch)=>{
+        return fetch('http://localhost:3001/diets')
+        .then(r=>r.json())
+        .then(data=> dispatch({
+            type: 'GET_ALL_DIETS',
+            payload:data
+        }))
+    }
+}
+
 export function searchRecipes(recipe){
     console.log('recipe a buscar',recipe)
     return (dispatch)=>{
@@ -48,28 +71,7 @@ export function sortRecipesDesc(campo){
     }
 }
 
-export function getDetailRecipe(id){
-    console.log('Ingreso a la action detalle con id',id)
-    return (dispatch)=>{
-        return fetch(`http://localhost:3001/recipes/${id}`)
-        .then(r=>r.json())
-        .then(data=> dispatch({
-            type: 'GET_DETAIL_RECIPE',
-            payload:data
-        }))
-    }
-}
 
-export function getAllDiets(){
-    return (dispatch)=>{
-        return fetch('http://localhost:3001/diets')
-        .then(r=>r.json())
-        .then(data=> dispatch({
-            type: 'GET_ALL_DIETS',
-            payload:data
-        }))
-    }
-}
 export function createRecipe(data){
     return (dispatch)=>{
         console.log(data)

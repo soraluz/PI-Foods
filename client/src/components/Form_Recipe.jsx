@@ -1,18 +1,21 @@
 import React from "react";
 import {useDispatch} from "react-redux"
 import {createRecipe} from "../actions/action";
+import  '../Styles/Form_Recipe.css'
 
 export function validate(input){
+   
     let errors={};
+    let expLetras=/^[A-Za-z]+[A-Za-z\s]*[A-Za-z]$/
     if(!input.name){
         errors.name='Nombre es requerido';
-    }else if(!/[A-Za-z]+\s*/.test(input.name)){
+    }else if(!expLetras.test(input.name)){
         errors.name='Nombre es invalido'
     }
     if(!input.summary){
         errors.summary="Resumen del plato requerido"
-    }else if(!/\w+\s|\w+/gi.test(input.summary)){
-        errors.summary='Nombre es invalido'
+    }else if(!expLetras.test(input.summary)){
+        errors.summary='Resumen del plato es invalido'
     }
     if(input.healthScore){
        if(!/\d+/.test(input.healthScore)){
@@ -24,6 +27,7 @@ export function validate(input){
     }
 return errors;
 }
+
 export default function Form_Recipe(props){
     const [input,setInput]=React.useState({
         name:'',
@@ -39,7 +43,6 @@ export default function Form_Recipe(props){
     function handleSubmit(e){
         e.preventDefault()
         dispatch(createRecipe(input))
-        console.log(props.history)
         props.history.goBack()
     }
     function handleChange(e) {
@@ -68,34 +71,37 @@ export default function Form_Recipe(props){
         }
     }
     
-    return <div>
-            <form onSubmit={(e)=>handleSubmit(e)}>
+return <div className="form">
+        <form onSubmit={(e)=>handleSubmit(e)}>
+            <h1>Ingreso de Recetas</h1>
             <label>Name: </label>
-            <input type='text' name='name' value={input.name} onChange={(e)=>handleChange(e)} />
-            <p>{errors.name}</p>
+            <input type='text' className="input" name='name' value={input.name} onChange={(e)=>handleChange(e)} />
+            {errors.name?<p>{errors.name}</p>:null}
             <label>Resumen del plato: </label>
-            <input type='text' name='summary' value={input.summary} onChange={(e)=>handleChange(e)} />
-            <p>{errors.summary}</p>
-            <label>Nivel de "comida saludable: </label>
-            <input type='text' name='healthScore' value={input.healthScore} onChange={(e)=>handleChange(e)} />
-            <p>{errors.healthScore}</p>
+            <input type='text' className="input" name='summary' value={input.summary} onChange={(e)=>handleChange(e)} />
+            {errors.summary?<p>{errors.summary}</p>:null}
+           
+            <label>Nivel de comida saludable: </label>
+            <input type='text' className="input" name='healthScore' value={input.healthScore} onChange={(e)=>handleChange(e)} />
+            {errors.healthScore?<p>{errors.healthScore}</p>:null}
+         
             <label>Paso a Paso: </label>
-            <input type='text' name='steps' value={input.steps} onChange={(e)=>handleChange(e)} />
-            <p>{errors.steps}</p>
-            <p>Tipos de Dietas:</p>
-            <input type="checkbox" id="1" value='gluten free' onClick={(e)=>hanledCheck(e)} />gluten free
-            <input type="checkbox" id="2" value='dairy free' onClick={(e)=>hanledCheck(e)} />dairy free
-            <input type="checkbox" id="3" value='lacto ovo vegetarian' onClick={(e)=>hanledCheck(e)} />lacto ovo vegetarian
-            <input type="checkbox" id="4" value='vegetarian' onClick={(e)=>hanledCheck(e)} />vegetarian
-            <input type="checkbox" id="5" value='vegan' onClick={(e)=>hanledCheck(e)} />vegan
-            <input type="checkbox" id="6" value='paleolithic' onClick={(e)=>hanledCheck(e)} />paleolithic
-            <input type="checkbox" id="7" value='primal' onClick={(e)=>hanledCheck(e)} />primal
-            <input type="checkbox" id="8" value='whole 30' onClick={(e)=>hanledCheck(e)} />whole 30
-            <input type="checkbox" id="9" value='pescatarian' onClick={(e)=>hanledCheck(e)} />pescatarian
-            <input type="checkbox" id="10" value='ketogenic' onClick={(e)=>hanledCheck(e)} />ketogenic
-            <input type="checkbox" id="11" value='fodmap friendly' onClick={(e)=>hanledCheck(e)} />fodmap friendly
+            <input type='text' className="input" name='steps' value={input.steps} onChange={(e)=>handleChange(e)} />
+         
+            <h2>Tipos de Dietas:</h2>
+            <input type="checkbox" className="check" id="1" value='gluten free' onClick={(e)=>hanledCheck(e)} />gluten free
+            <input type="checkbox" className="check" id="2" value='dairy free' onClick={(e)=>hanledCheck(e)} />dairy free
+            <input type="checkbox" className="check" id="3" value='lacto ovo vegetarian' onClick={(e)=>hanledCheck(e)} />lacto ovo vegetarian
+            <input type="checkbox" className="check" id="4" value='vegetarian' onClick={(e)=>hanledCheck(e)} />vegetarian
+            <input type="checkbox" className="check" id="5" value='vegan' onClick={(e)=>hanledCheck(e)} />vegan
+            <input type="checkbox" className="check" id="6" value='paleolithic' onClick={(e)=>hanledCheck(e)} />paleolithic
+            <input type="checkbox" className="check" id="7" value='primal' onClick={(e)=>hanledCheck(e)} />primal
+            <input type="checkbox" className="check" id="8" value='whole 30' onClick={(e)=>hanledCheck(e)} />whole 30
+            <input type="checkbox" className="check" id="9" value='pescatarian' onClick={(e)=>hanledCheck(e)} />pescatarian
+            <input type="checkbox" className="check" id="10" value='ketogenic' onClick={(e)=>hanledCheck(e)} />ketogenic
+            <input type="checkbox" className="check" id="11" value='fodmap friendly' onClick={(e)=>hanledCheck(e)} />fodmap friendly
             <br />
-            <button>Enviar Datos</button>
+           <button >Enviar Datos</button>
         </form>
     </div>
 }
