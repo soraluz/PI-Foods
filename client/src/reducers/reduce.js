@@ -6,7 +6,7 @@ const initialState={
     ordenDesc:[],
     detail:{},
     diets:[],
-    loading:true
+    loading:false
 }
 export default function reducer(state=initialState,action){
     switch(action.type){
@@ -23,10 +23,11 @@ export default function reducer(state=initialState,action){
             }
                               
         case 'GET_DETAIL_RECIPE':
-            console.log('Ingreso al reduce de detalle',action.payload)
+            
             return{
                 ...state,
-                detail:action.payload
+                detail:action.payload,
+                loading:false
             }
         case 'GET_ALL_DIETS':
               return{
@@ -35,41 +36,59 @@ export default function reducer(state=initialState,action){
             }
 
         case 'SEARCH_RECIPES':
-             console.log('action.payload',action.payload)
+            
                  return{
                        ...state,
                         busqueda:action.payload,
                         ordenAsc:[],
-                        ordenDesc:[]
+                        ordenDesc:[],
+                        loading:false
                     }    
                             
 
         case 'FILTER_RECIPES':
-            
-            return{
-                ...state,
-                filtro:state.recipes.filter(recipe=>{ 
-                    return recipe.diets?.includes(action.payload)|| 
-                            recipe.vegetarian && action.payload=='vegetarian' ||
-                            recipe.vegan && action.payload=='vegan' ||
-                            recipe.glutenFree && action.payload=='gluten free' ||
-                            recipe.dairyFree && action.payload=='dairy free' 
 
-                }),
-                busqueda:[],
-                ordenAsc:[],
-                ordenDesc:[]
+            let resultado=state.recipes.filter(recipe=>{ 
+                return recipe.diets?.includes(action.payload)|| 
+                        (recipe.vegetarian && action.payload==='vegetarian') ||
+                        (recipe.vegan && action.payload==='vegan')||
+                        (recipe.glutenFree && action.payload==='gluten free')||
+                        (recipe.dairyFree && action.payload==='dairy free')
+
+            })
+            console.log(resultado)
+            if(resultado.length){
+                return{
+                    ...state,
+                    filtro:resultado,
+                    busqueda:[],
+                    ordenAsc:[],
+                    ordenDesc:[],
+                    loading:false
+                }
             }
+            else{
+                return{
+                    ...state,
+                    filtro:[],
+                    busqueda:[],
+                    ordenAsc:[],
+                    ordenDesc:[],
+                    loading:'No se encontraron los registros'
+                }
+            }
+            
+            
 
         case 'SORT_RECIPES_ASC':
-            if(action.payload=='Nombre'){
+            if(action.payload==='Nombre'){
                 return{
                     ...state,
                     ordenAsc: state.filtro.sort((a,b)=>{
-                        if (a.title < b.title) {
+                        if (a.title.toUpperCase() < b.title.toUpperCase()) {
                             return -1;
                           }
-                          if (a.title > b.title) {
+                          if (a.title.toUpperCase() > b.title.toUpperCase()) {
                             return 1;
                           }
                           // a must be equal to b
@@ -78,7 +97,7 @@ export default function reducer(state=initialState,action){
                     ordenDesc:[]
                 }
             }
-            else if(action.payload=='Health Score'){
+            else if(action.payload==='Health Score'){
                 
                 return{
                     ...state,
@@ -92,20 +111,21 @@ export default function reducer(state=initialState,action){
                           // a must be equal to b
                           return 0;
                     }),
-                    ordenDesc:[]
+                    ordenDesc:[],
+                    loading:false
                 }
             }
         
 
         case 'SORT_RECIPES_DESC':
-            if(action.payload=='Nombre'){
+            if(action.payload==='Nombre'){
              return{
                 ...state,
                 ordenDesc: state.filtro.sort((a,b)=>{
-                    if (a.title > b.title) {
+                    if (a.title.toUpperCase() > b.title.toUpperCase()) {
                         return -1;
                       }
-                      if (a.title < b.title) {
+                      if (a.title.toUpperCase() < b.title.toUpperCase()) {
                         return 1;
                       }
                       // a must be equal to b
@@ -115,7 +135,7 @@ export default function reducer(state=initialState,action){
 
              }
           }
-          else if(action.payload=='Health Score'){
+          else if(action.payload==='Health Score'){
             return{
                 ...state,
                 ordenDesc: state.filtro.sort((a,b)=>{
@@ -128,7 +148,8 @@ export default function reducer(state=initialState,action){
                       // a must be equal to b
                       return 0;
                 }),
-                ordenAsc:[]
+                ordenAsc:[],
+                loading:false
             }
           }
 
@@ -139,6 +160,13 @@ export default function reducer(state=initialState,action){
 
             }
         default: return state
+
+        case 'SET_STATUS':
+            return{
+                ...state,
+                loading:action.payload
+            }
+
     }
 
 }

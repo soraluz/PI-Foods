@@ -11,25 +11,25 @@ export default function Recipes({recetas}){
 
     for(let i=0;i<pags;i++)paginas[i]=i+1
 
-    console.log('pagina',pag)
-    function paginacion(){
+     function paginacion(){
         return recetas.slice(currentPage,currentPage+9)
     }
 
     function handledSumbit(e){
-
-        if(e.target.name=='next'){
+        console.log('ingreso handled',e.target)
+        if(e.target.name==='next'){
+            
             if(pag>=pags){ 
-                e.target.disabled=true                
+                            
             }
             else{
                 nextPage()
             }
         }
-        else if(e.target.name=='prev'){
+        else if(e.target.name==='prev'){
            
             if(pag<=1){
-                e.target.disabled=true
+               
             }
             else{
                 prevPage()
@@ -38,9 +38,9 @@ export default function Recipes({recetas}){
            
         }
         else{
-            console.log(e.target.value)
             pagina(e.target.value)
         }
+        e.target.className='select'
     }
 
     function nextPage(){
@@ -54,6 +54,7 @@ export default function Recipes({recetas}){
     function pagina(pag){
         pag--;
         setCurrentPage(pag*9)
+
     }
 
     return <div className='recipes'>
@@ -64,7 +65,6 @@ export default function Recipes({recetas}){
                 })}
                 <button name="next" onClick={(e)=>handledSumbit(e)}>Next</button>
             </div>
-            <br />
             <div className='home'>
             {
                  paginacion()?.map((receta)=>{

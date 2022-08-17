@@ -1,6 +1,7 @@
 .recipes{
     display:flex;
     flex-direction:column;
+    margin: 30px
 }
 .home{
     display: flex;
@@ -8,10 +9,26 @@
     justify-content:space-around;
     flex-wrap: wrap;
 
+
 }
 .paginado{
     flex: flex;
-   flex-direction: row;
+    flex-direction: row;
     justify-content:space-around;
     flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.paginado button{
+    border:2px solid brown;
+    border-radius: 20px;
+    font-size: 20px;
+    background-color:antiquewhite ;
+}
+
+.paginado button:active{
+    background-color:aqua;
+}
+.paginado button:selected{
+    color:aqua;
 }

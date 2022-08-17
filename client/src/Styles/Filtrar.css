@@ -1,4 +1,15 @@
 .filtrado{
     display: flex;
     flex-direction: row;
+    justify-content:space-around;
+    align-items: center;
+    flex-wrap: wrap
+}
+.filtrado label{
+    
+    font-size: 20px;
+    color:brown;
+}
+.filtrado select{
+    font-size: 20px;
 }

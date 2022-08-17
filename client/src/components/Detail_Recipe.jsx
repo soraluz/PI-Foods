@@ -6,17 +6,23 @@ import '../Styles/Detail_Recipe.css'
 export function Detail_Recipe(props){
     
     useEffect(()=>{
+        console.log('Ingreso al usseEffect')
         const id=props.match.params.id
         props.getDetailRecipe(id)
+        console.log('Salio del useEffect',props.detail)
     },[])
 
+    var tipos;
 
+    console.log('dietas de id enviado', props.detail)
 
     if(props.detail.diets){
-        var tipos=new Set([...props.detail.diets])
+        console.log('ingreso al if si tiene dietas')
+        tipos=new Set([...props.detail.diets])
     }
     else{
-        var tipos=new Set([])
+        console.log('Ingreso al else que no tiene dietas')
+        tipos=new Set([])
     }
     
     if (props.detail.vegetarian) tipos.add('vegetarian')
@@ -26,20 +32,19 @@ export function Detail_Recipe(props){
     let arreglo=[...tipos]
         
     return <div className="detail">
+         {props.loading ? 'loading...' :null  }
          <h2>{props.detail.title}</h2>
             {props.detail.image ? <img src={props.detail.image} alt='Imagen no encontrada' />:null}
             <p>{props.detail.dishTypes}</p>
             <p>{props.detail.summary}</p>
-            <div>
-            { arreglo?.map(tipo=>{
-                    return <p>{tipo}</p>
-            })} 
-            </div> 
+            <p>{ arreglo.join(" - ")}</p>
+            <p>{props.detail.steps}</p>
         </div>    
 }
 function mapStateToProps(state){
     return{
-        detail:state.detail
+        detail:state.detail,
+        loading:state.loading
     }
 }
 

@@ -1,6 +1,14 @@
 .ordenar{
     display:flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content:space-around;
-    flex-wrap: wrap;
+    align-items: center;
+    flex-wrap: wrap
+}
+.ordenar p{
+    font-size: 20px;
+    color:brown;
+}
+.ordenar select{
+    font-size: 20px;
 }

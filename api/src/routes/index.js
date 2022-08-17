@@ -17,6 +17,8 @@ const {name}= req.query
 
      try{         
           let resultado;
+          //Se trae de la API
+          /*
           let api= await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=10`)
           api= api.data.results.map(receta=>{
               
@@ -33,15 +35,24 @@ const {name}= req.query
                             dairyFree:receta.dairyFree
                    } 
                    })
-          let bd=await Recipe.findAll()
+          */
+          //Se trae de la Base de Datos
+          let bd=await Recipe.findAll({include:Diet})
+          
           bd=bd?.map(receta=>{
+               console.log(receta.dataValues.diets)
                return {
                     id:receta.id,
                     title:receta.name,
+                    healthScore:receta.healthScore,
+                    diets:receta.dataValues.diets.map(e=>{
+                         return e.name
+                    })
                     //image:receta.image
-                    diets:receta.diets
                }
           })
+          //agregue api para simular
+          const api=[]
           resultado=api.concat(bd)
                //Si se envia query
                if(name){
@@ -70,23 +81,34 @@ const {name}= req.query
 
 router.get('/recipes/:idReceta',async function(req,res){
      const {idReceta}=req.params
-     console.log('id',idReceta)
-     //ejem idReceta=716429, 715538
+       
      try{     
          //Buscamos en la Api
          if(idReceta.includes('-')){
 
           console.log('entro BD')
-          const result=await Recipe.findByPk(idReceta)
-         
+          let result=await Recipe.findByPk(idReceta)
+     
+    
           if(result){
                
-               const resultadoBD=await Recipe.findOne({
+               let resultadoBD=await Recipe.findOne({
                     where:{
                          id:idReceta
-                    },include:Diet})
-                    console.log(resultadoBD.toJSON())
-               return res.json(resultadoBD)
+                    },include:Diet
+                   })
+                   console.log('Despues de consultar BD',resultadoBD.dataValues)
+                   let dietas=await resultadoBD.getDiets()
+                   console.log('dietas despues de hacer getDiets',dietas)
+
+                    dietas=dietas?.map(e=>{
+                    return e.name
+                   })
+                   console.log('dietas despues de hacer mapeo de dietas',dietas)
+                  // resultadoBD.dataValues.diets=dietas
+                  resultadoBD.dataValues.diets=dietas
+                  console.log('resultado despues de asignar la propiedad de dietas',resultadoBD)
+                  res.json(resultadoBD.dataValues)  
                }
          
           }
@@ -112,14 +134,13 @@ router.get('/recipes/:idReceta',async function(req,res){
                          res.json(receta)
                }
      }catch(e){
-          res.send("No se encontraron los datos con el ID enviado")
+          res.redirect('/error')
      }
 })
 
 router.post('/recipes', async function(req,res){
      const {name, summary, healthScore,steps,diets}=req.body;
-     console.log(diets)
-
+     
      try{
           if(!name || !summary) return res.status(404).send("Falta enviar datos que son neesarios")
           const receta=await Recipe.create(
@@ -133,17 +154,17 @@ router.post('/recipes', async function(req,res){
           
           res.status(201).json(receta)
      }catch(e){
-          res.redirect('/home')
+          res.redirect('/error')
      }    
 
 })
 
 router.get('/diets',async function(req,res){
      try{
-          const dietas=await Diet.findAll()
+          let dietas=await Diet.findAll()
           if(!dietas.length){
                //buscar api
-              await Diet.bulkCreate([
+               dietas= await Diet.bulkCreate([
                     {name:"gluten free"},
                     {name:"dairy free"},
                     {name: "lacto ovo vegetarian"},
@@ -157,13 +178,15 @@ router.get('/diets',async function(req,res){
                     {name: "fodmap friendly"}                     
                   
                ])
+              
                res.json(dietas)
           }
           else res.json(dietas)
      }catch(e){
-          res.redirect('/home')
+          res.redirect('/error')
      }
 })
+
 router.get('*',function(req,res){
      res.send("Esta ruta no existe")
 })

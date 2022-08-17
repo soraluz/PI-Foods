@@ -4,17 +4,17 @@ import { connect } from "react-redux"
 import '../Styles/Filtrar.css'
 
 export function Filtrar(props){
+    {useEffect(() =>  props.getAllDiets(), [])}
 
     function handledSelect(e){
         e.preventDefault()
-        if(e.target.value=='todos') props.getAllRecipes()
-        else props.filterRecipes(e.target.value)
-       
+        if(e.target.value==='todos') props.getAllRecipes()
+        else {
+           props.filterRecipes(e.target.value)            
+        }
     }
     return <div className="filtrado">
-    {useEffect(() => {
-        props.getAllDiets() 
-}, [])}
+
             <label>Tipo de Dieta</label>
             <select name="diet" onChange={(e)=>handledSelect(e)}>
                 <option value='todos'>todos</option>

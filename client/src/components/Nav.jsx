@@ -9,6 +9,6 @@ export default function Nav(){
         <Buscar />
         <Filtrar />
         <Ordenar />
-        <NavLink to='/recipes/create'><p>Nueva Receta</p></NavLink>
+        <NavLink to='/recipes/create'>Nueva Receta</NavLink>
     </div>
 }

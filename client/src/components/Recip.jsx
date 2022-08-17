@@ -1,13 +1,15 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
-import '../Styles/Recip.css'
+import '../Styles/Recip.css'    
 
 export default function Recip({receta}){
+  var tipos;
+  
     if(receta.diets){
-        var tipos=new Set([...receta.diets])
+        tipos=new Set([...receta.diets])
     }
     else{
-        var tipos=new Set([])
+        tipos=new Set([])
     }
     //Llena los tipos
     if (receta.vegetarian) tipos.add('vegetarian')
@@ -16,21 +18,16 @@ export default function Recip({receta}){
     if (receta.dairyFree) tipos.add('dairy free')
     let arreglo=[...tipos]
         
-    return <>
-       <NavLink to={`/recipe/${receta.id}`}>
-        <div className="recipe">
-         <h2>{receta.title}</h2>
-            {receta.image ? <img src={receta.image} alt='Imagen no encontrada' />:null
-            }
-        <div>
-        { arreglo?.map(tipo=>{
-                    return <p>{tipo}</p>
-            })} 
-        </div>
-             
-            {receta.healthScore?<p>{receta.healthScore}</p>:null}
-        </div>
-        </NavLink>
-        
-   </>
+    return <div className="tarjeta">
+               <NavLink to={`/recipe/${receta.id}`} >
+                <div className="recipe">
+                    <h2>{receta.title}</h2>
+                     {receta.image ? <img src={receta.image} alt='Imagen no encontrada' />:null
+                     }
+                    <p>{arreglo.join(' - ')}</p> 
+                   
+                    {receta.healthScore?<p>{receta.healthScore}</p>:null}
+                </div>
+              </NavLink>
+            </div>
 }

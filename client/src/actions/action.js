@@ -1,25 +1,28 @@
 export function getAllRecipes(){
    
     return (dispatch)=>{
+        dispatch(setStatus('...Cargando'))
         return fetch("http://localhost:3001/recipes")
         .then(r=>r.json())
         .then(data=> dispatch({
             type: 'GET_ALL_RECIPES',
             payload:data
         }))
-        .catch(e=>'Datos no encontrados')
+        .catch(e=>e=>dispatch(setStatus('No se encontraron registros')))
     }
 }
 
 export function getDetailRecipe(id){
-    console.log('Ingreso a la action detalle con id',id)
+   
     return (dispatch)=>{
+        dispatch(setStatus('...Cargando'))
         return fetch(`http://localhost:3001/recipes/${id}`)
         .then(r=>r.json())
         .then(data=> dispatch({
             type: 'GET_DETAIL_RECIPE',
             payload:data
         }))
+        .catch(e=>e=>dispatch(setStatus('No se encontraron registros')))
     }
 }
 
@@ -35,20 +38,21 @@ export function getAllDiets(){
 }
 
 export function searchRecipes(recipe){
-    console.log('recipe a buscar',recipe)
+    
     return (dispatch)=>{
+        dispatch(setStatus('...Cargando'))
         return fetch(`http://localhost:3001/recipes?name=${recipe}`)
         .then(r=>r.json())
         .then(data=> dispatch({
             type: 'SEARCH_RECIPES',
             payload:data
         }))
-        .catch(e=>'Datos no encontrados')   
+        .catch(e=>dispatch(setStatus('No se encontraron registros')))
     }
 }
 
 export function filterRecipes(data){
-    
+    dispatch(setStatus('...Cargando'))
     return {
         type: 'FILTER_RECIPES',
         payload:data
@@ -56,7 +60,7 @@ export function filterRecipes(data){
 }
 
 export function sortRecipesAsc(campo){
-    console.log(campo)
+   
     return {
         type: 'SORT_RECIPES_ASC',
         payload:campo
@@ -74,7 +78,7 @@ export function sortRecipesDesc(campo){
 
 export function createRecipe(data){
     return (dispatch)=>{
-        console.log(data)
+        
         return fetch("http://localhost:3001/recipes",
         {   method:'POST',
             body:JSON.stringify(data),
@@ -87,5 +91,13 @@ export function createRecipe(data){
             type: 'CREATE_RECIPE',
             payload:data
         }))
+        .catch(e=>dispatch(setStatus('Error en alguno de los datos')))
+    }
+}
+
+export function setStatus(payload){
+    return {
+        type: 'SET_STATUS',
+        payload:payload
     }
 }

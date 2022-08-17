@@ -3,17 +3,13 @@ import { connect } from "react-redux"
 import Recipes from "./Recipes"
 import { useEffect } from "react"
 import { getAllRecipes } from "../actions/action"
+import '../Styles/Home.css'
 
 export function Home(props){
-   
+    {useEffect(() =>  props.getAllRecipes(), [])}
     return <div>
         
-        {useEffect(() => {
-            
-            props.getAllRecipes()
-        }, [])}
-        
-   {props.loading ? 'loading...' :null  }
+   {props.loading ? <span id="loading">{props.loading}</span>:null  }
    {props.ordenAsc.length?<Recipes recetas={props.ordenAsc}/>:
     props.ordenDesc.length?<Recipes recetas={props.ordenDesc}/>:
     props.busqueda.length?<Recipes recetas={props.busqueda}/>:
