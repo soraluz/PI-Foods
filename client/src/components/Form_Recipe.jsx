@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch} from "react-redux"
-import {createRecipe} from "../actions/action";
+import {createRecipe, getAllRecipes} from "../actions/action";
 import  '../Styles/Form_Recipe.css'
 
 export function validate(input){
@@ -43,6 +43,7 @@ export default function Form_Recipe(props){
     function handleSubmit(e){
         e.preventDefault()
         dispatch(createRecipe(input))
+        dispatch(getAllRecipes())
         props.history.goBack()
     }
     function handleChange(e) {

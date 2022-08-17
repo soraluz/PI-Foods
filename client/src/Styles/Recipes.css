@@ -3,14 +3,6 @@
     flex-direction:column;
     margin: 30px
 }
-.home{
-    display: flex;
-    flex-direction: row;
-    justify-content:space-around;
-    flex-wrap: wrap;
-
-
-}
 .paginado{
     flex: flex;
     flex-direction: row;
@@ -18,17 +10,35 @@
     flex-wrap: wrap;
     margin-bottom: 20px;
 }
-
-.paginado button{
+.boton{
+    color:black;
     border:2px solid brown;
     border-radius: 20px;
     font-size: 20px;
     background-color:antiquewhite ;
 }
 
-.paginado button:active{
-    background-color:aqua;
+.paginado button:hover{
+    background-color: aqua;
 }
-.paginado button:selected{
-    color:aqua;
+
+.paginado button:focus{
+    color:blue;
+}
+
+.home{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    align-items: center;
+    flex-wrap: wrap;
+
+
+}
+.select{
+    color:red;
+    border:2px solid brown;
+    border-radius: 20px;
+    font-size: 20px;
+    background-color:antiquewhite ;
 }

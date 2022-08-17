@@ -56,7 +56,7 @@ export default function reducer(state=initialState,action){
                         (recipe.dairyFree && action.payload==='dairy free')
 
             })
-            console.log(resultado)
+            
             if(resultado.length){
                 return{
                     ...state,
@@ -94,7 +94,8 @@ export default function reducer(state=initialState,action){
                           // a must be equal to b
                           return 0;
                     }),
-                    ordenDesc:[]
+                    ordenDesc:[],
+                    loading:false
                 }
             }
             else if(action.payload==='Health Score'){
@@ -131,8 +132,8 @@ export default function reducer(state=initialState,action){
                       // a must be equal to b
                       return 0;
                 }),
-                ordenAsc:[]
-
+                ordenAsc:[],
+                loading:false
              }
           }
           else if(action.payload==='Health Score'){
@@ -154,9 +155,10 @@ export default function reducer(state=initialState,action){
           }
 
         case 'CREATE_RECIPE':
+            let registro=state.recipes.concat(action.payload)
             return{
                 ...state,
-                recipes:state.recipes.concat(action.payload)
+                recipes:registro
 
             }
         default: return state

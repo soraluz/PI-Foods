@@ -52,7 +52,7 @@ export function searchRecipes(recipe){
 }
 
 export function filterRecipes(data){
-    dispatch(setStatus('...Cargando'))
+    setStatus('...Cargando')
     return {
         type: 'FILTER_RECIPES',
         payload:data
@@ -92,6 +92,13 @@ export function createRecipe(data){
             payload:data
         }))
         .catch(e=>dispatch(setStatus('Error en alguno de los datos')))
+    }
+}
+
+export function setCurrent(current){
+    return {
+        type: 'SET_CURRENT',
+        payload:current
     }
 }
 

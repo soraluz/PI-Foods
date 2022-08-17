@@ -6,14 +6,15 @@ import { getAllRecipes } from "../actions/action"
 import '../Styles/Home.css'
 
 export function Home(props){
+
     {useEffect(() =>  props.getAllRecipes(), [])}
     return <div>
-        
    {props.loading ? <span id="loading">{props.loading}</span>:null  }
    {props.ordenAsc.length?<Recipes recetas={props.ordenAsc}/>:
     props.ordenDesc.length?<Recipes recetas={props.ordenDesc}/>:
     props.busqueda.length?<Recipes recetas={props.busqueda}/>:
-    props.filtro.length?<Recipes recetas={props.filtro}/>:null
+    props.filtro.length?<Recipes recetas={props.filtro}/>:
+    props.filtro.length?<Recipes recetas={props.recipes}/>:null
 }
     </div>
 }
@@ -24,7 +25,8 @@ function mapStateToProps(state){
         busqueda:state.busqueda,
         ordenAsc:state.ordenAsc,
         ordenDesc:state.ordenDesc,
-        loading:state.loading
+        loading:state.loading,
+        currentPage:state.currentPage
     }
 }
 function mapDispatchToProps(dispatch){

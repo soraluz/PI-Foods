@@ -15,11 +15,11 @@ const router = Router();
 router.get('/recipes', async function(req,res){
 const {name}= req.query
 
-     try{         
+     try{
           let resultado;
           //Se trae de la API
-          /*
-          let api= await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=10`)
+          
+          let api= await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=20`)
           api= api.data.results.map(receta=>{
               
                    return {
@@ -35,24 +35,24 @@ const {name}= req.query
                             dairyFree:receta.dairyFree
                    } 
                    })
-          */
+          
           //Se trae de la Base de Datos
+
           let bd=await Recipe.findAll({include:Diet})
           
           bd=bd?.map(receta=>{
-               console.log(receta.dataValues.diets)
+               
                return {
                     id:receta.id,
                     title:receta.name,
                     healthScore:receta.healthScore,
                     diets:receta.dataValues.diets.map(e=>{
                          return e.name
-                    })
+                    })                  
                     //image:receta.image
                }
           })
-          //agregue api para simular
-          const api=[]
+        
           resultado=api.concat(bd)
                //Si se envia query
                if(name){
@@ -83,42 +83,28 @@ router.get('/recipes/:idReceta',async function(req,res){
      const {idReceta}=req.params
        
      try{     
-         //Buscamos en la Api
+         //Buscamos en la BD
          if(idReceta.includes('-')){
 
-          console.log('entro BD')
-          let result=await Recipe.findByPk(idReceta)
-     
-    
-          if(result){
-               
+          let result=await Recipe.findByPk(idReceta)        
+          if(result){               
                let resultadoBD=await Recipe.findOne({
                     where:{
                          id:idReceta
                     },include:Diet
                    })
-                   console.log('Despues de consultar BD',resultadoBD.dataValues)
+                  
                    let dietas=await resultadoBD.getDiets()
-                   console.log('dietas despues de hacer getDiets',dietas)
-
-                    dietas=dietas?.map(e=>{
-                    return e.name
+                   dietas=dietas?.map(e=>{
+                   return e.name
                    })
-                   console.log('dietas despues de hacer mapeo de dietas',dietas)
-                  // resultadoBD.dataValues.diets=dietas
-                  resultadoBD.dataValues.diets=dietas
-                  console.log('resultado despues de asignar la propiedad de dietas',resultadoBD)
-                  res.json(resultadoBD.dataValues)  
-               }
-         
-          }
-                    
-          else{      //Buscamos en la Base de Datos    
-               
-               console.log("Ingresamos a la API")
+                   resultadoBD.dataValues.diets=dietas
+                   res.json(resultadoBD.dataValues)  
+               }         
+          }                    
+          else{      //Buscamos en la API                
                const resultadoApi=await axios.get(`https://api.spoonacular.com/recipes/${idReceta}/information?apiKey=${API_KEY}`)
-               console.log('resultadoApi',resultadoApi.data)
-                         const receta= {
+                              const receta= {
                               image:resultadoApi.data.image,
                               title:resultadoApi.data.title,
                               dishTypes:resultadoApi.data.dishTypes,
@@ -150,7 +136,7 @@ router.post('/recipes', async function(req,res){
                healthScore:healthScore,
                steps:steps
           })
-          receta.addDiet(diets)
+          await receta.addDiet(diets)
           
           res.status(201).json(receta)
      }catch(e){

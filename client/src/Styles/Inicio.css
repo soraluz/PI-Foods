@@ -10,16 +10,16 @@
 .inicio button{
 
     position: absolute;
-    font-size: medium;
+    font-size: 20px;
     top:300px;
-    width: 90px;
-    height: 60px;
-    color:blue;
+    width: 150px;
+    height: 100px;
+    color:red;
     border-radius: 10px;
     background-color:bisque;
 }
 .inicio button:hover{
-    color:red;
+    color:blue;
     cursor: pointer;  
     font-size: 25px;
 }
