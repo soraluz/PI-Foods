@@ -1,24 +1,24 @@
 const initialState={
     recipes:[],
+    ordenamiento:[],
     filtro:[],
-    busqueda:[],
-    ordenAsc:[],
-    ordenDesc:[],
+    busqueda:[],   
     detail:{},
     diets:[],
-    loading:false
+    loading:false,
+    
 }
 export default function reducer(state=initialState,action){
     switch(action.type){
         case 'GET_ALL_RECIPES':
-        console.log('ingreso al reducer',action.payload)
+       
             return {
                 ...state,
                 recipes:action.payload,
                 filtro:action.payload,
                 busqueda:[],
-                ordenAsc:[],
-                ordenDesc:[],
+               ordenamiento:[],
+               detail:{},
                 loading:false
             }
                               
@@ -40,8 +40,8 @@ export default function reducer(state=initialState,action){
                  return{
                        ...state,
                         busqueda:action.payload,
-                        ordenAsc:[],
-                        ordenDesc:[],
+                        ordenamiento:[],
+                        filtro:[],
                         loading:false
                     }    
                             
@@ -62,8 +62,7 @@ export default function reducer(state=initialState,action){
                     ...state,
                     filtro:resultado,
                     busqueda:[],
-                    ordenAsc:[],
-                    ordenDesc:[],
+                    ordenamiento:[],
                     loading:false
                 }
             }
@@ -72,8 +71,7 @@ export default function reducer(state=initialState,action){
                     ...state,
                     filtro:[],
                     busqueda:[],
-                    ordenAsc:[],
-                    ordenDesc:[],
+                    ordenamiento:[],
                     loading:'No se encontraron los registros'
                 }
             }
@@ -81,10 +79,11 @@ export default function reducer(state=initialState,action){
             
 
         case 'SORT_RECIPES_ASC':
+            let asc=[...state.filtro]
             if(action.payload==='Nombre'){
                 return{
                     ...state,
-                    ordenAsc: state.filtro.sort((a,b)=>{
+                    ordenamiento: asc.sort((a,b)=>{
                         if (a.title.toUpperCase() < b.title.toUpperCase()) {
                             return -1;
                           }
@@ -94,15 +93,15 @@ export default function reducer(state=initialState,action){
                           // a must be equal to b
                           return 0;
                     }),
-                    ordenDesc:[],
-                    loading:false
+                    //ordenDesc:[],
+                   //loading:false
                 }
             }
             else if(action.payload==='Health Score'){
                 
                 return{
                     ...state,
-                    ordenAsc: state.filtro.sort((a,b)=>{
+                    ordenamiento: asc.sort((a,b)=>{
                         if (a.healthScore < b.healthScore) {
                             return -1;
                           }
@@ -112,17 +111,18 @@ export default function reducer(state=initialState,action){
                           // a must be equal to b
                           return 0;
                     }),
-                    ordenDesc:[],
-                    loading:false
+                  // ordenDesc:[],
+                  //  loading:false
                 }
             }
         
 
-        case 'SORT_RECIPES_DESC':
+        case 'SORT_RECIPES_DESC':   
+            const desc=[...state.filtro]
             if(action.payload==='Nombre'){
              return{
                 ...state,
-                ordenDesc: state.filtro.sort((a,b)=>{
+                ordenamiento: desc.sort((a,b)=>{
                     if (a.title.toUpperCase() > b.title.toUpperCase()) {
                         return -1;
                       }
@@ -132,14 +132,14 @@ export default function reducer(state=initialState,action){
                       // a must be equal to b
                       return 0;
                 }),
-                ordenAsc:[],
-                loading:false
+                //ordenAsc:[],
+               // loading:false
              }
           }
           else if(action.payload==='Health Score'){
             return{
                 ...state,
-                ordenDesc: state.filtro.sort((a,b)=>{
+                ordenamiento: desc.sort((a,b)=>{
                     if (a.healthScore > b.healthScore) {
                         return -1;
                       }
@@ -149,8 +149,8 @@ export default function reducer(state=initialState,action){
                       // a must be equal to b
                       return 0;
                 }),
-                ordenAsc:[],
-                loading:false
+                //ordenAsc:[],
+             //   loading:false
             }
           }
 
@@ -158,8 +158,8 @@ export default function reducer(state=initialState,action){
             let registro=state.recipes.concat(action.payload)
             return{
                 ...state,
-                recipes:registro
-
+                recipes:registro,
+                loading:'Receta creada correctamente'
             }
         default: return state
 
@@ -167,7 +167,7 @@ export default function reducer(state=initialState,action){
             return{
                 ...state,
                 loading:action.payload
-            }
+            }   
 
     }
 

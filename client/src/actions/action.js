@@ -14,6 +14,7 @@ export function getAllRecipes(){
 
 export function getDetailRecipe(id){
    
+   
     return (dispatch)=>{
         dispatch(setStatus('...Cargando'))
         return fetch(`http://localhost:3001/recipes/${id}`)
@@ -22,7 +23,7 @@ export function getDetailRecipe(id){
             type: 'GET_DETAIL_RECIPE',
             payload:data
         }))
-        .catch(e=>e=>dispatch(setStatus('No se encontraron registros')))
+        .catch(err=>console.log(err.name))
     }
 }
 
@@ -92,13 +93,6 @@ export function createRecipe(data){
             payload:data
         }))
         .catch(e=>dispatch(setStatus('Error en alguno de los datos')))
-    }
-}
-
-export function setCurrent(current){
-    return {
-        type: 'SET_CURRENT',
-        payload:current
     }
 }
 

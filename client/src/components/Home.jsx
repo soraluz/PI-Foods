@@ -10,11 +10,9 @@ export function Home(props){
     {useEffect(() =>  props.getAllRecipes(), [])}
     return <div>
    {props.loading ? <span id="loading">{props.loading}</span>:null  }
-   {props.ordenAsc.length?<Recipes recetas={props.ordenAsc}/>:
-    props.ordenDesc.length?<Recipes recetas={props.ordenDesc}/>:
+   {props.ordenamiento.length?<Recipes recetas={props.ordenamiento}/>:
     props.busqueda.length?<Recipes recetas={props.busqueda}/>:
-    props.filtro.length?<Recipes recetas={props.filtro}/>:
-    props.filtro.length?<Recipes recetas={props.recipes}/>:null
+    props.filtro.length?<Recipes recetas={props.filtro}/>:null
 }
     </div>
 }
@@ -23,8 +21,7 @@ function mapStateToProps(state){
         recipes:state.recipes,
         filtro:state.filtro,
         busqueda:state.busqueda,
-        ordenAsc:state.ordenAsc,
-        ordenDesc:state.ordenDesc,
+        ordenamiento:state.ordenamiento,
         loading:state.loading,
         currentPage:state.currentPage
     }

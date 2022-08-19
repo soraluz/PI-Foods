@@ -2,14 +2,15 @@ import React, { useEffect } from "react"
 import { connect } from "react-redux"
 import { getDetailRecipe } from "../actions/action"
 import '../Styles/Detail_Recipe.css'
+import { NavLink } from "react-router-dom"
 
 export function Detail_Recipe(props){
     
     useEffect(()=>{
-        console.log('Ingreso al usseEffect')
+       
         const id=props.match.params.id
         props.getDetailRecipe(id)
-        console.log('Salio del useEffect',props.detail)
+   
     },[])
 
     var tipos;
@@ -32,6 +33,7 @@ export function Detail_Recipe(props){
     let arreglo=[...tipos]
         
     return <div className="detail">
+        <div><NavLink to='/Home'>Home</NavLink> </div>
          {props.loading ? 'loading...' :null  }
          <h2>{props.detail.title}</h2>
             {props.detail.image ? <img src={props.detail.image} alt='Imagen no encontrada' />:null}

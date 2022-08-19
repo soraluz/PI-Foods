@@ -23,9 +23,7 @@ function App() {
       <Route path="/error">
         <Error />
       </Route>
-
-     
-    </div>
+ </div>
 }
 
 export default App;

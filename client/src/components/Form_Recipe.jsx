@@ -1,7 +1,9 @@
 import React from "react";
-import {useDispatch} from "react-redux"
-import {createRecipe, getAllRecipes} from "../actions/action";
+import {useDispatch, useSelector} from "react-redux"
+import {createRecipe} from "../actions/action";
 import  '../Styles/Form_Recipe.css'
+import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
 
 export function validate(input){
    
@@ -29,6 +31,14 @@ return errors;
 }
 
 export default function Form_Recipe(props){
+
+    useEffect(()=>{
+       const boton= document.getElementById('enviar')
+       boton.disabled=true
+    },[]) 
+
+    const loading=useSelector(state=>state.loading)
+
     const [input,setInput]=React.useState({
         name:'',
         summary:'',
@@ -43,8 +53,6 @@ export default function Form_Recipe(props){
     function handleSubmit(e){
         e.preventDefault()
         dispatch(createRecipe(input))
-        dispatch(getAllRecipes())
-        props.history.goBack()
     }
     function handleChange(e) {
        setInput({
@@ -73,6 +81,7 @@ export default function Form_Recipe(props){
     }
     
 return <div className="create" >
+        <div ><NavLink to='/Home'>Home</NavLink> </div>
         <h2>Ingreso de Recetas</h2>
         <form onSubmit={(e)=>handleSubmit(e)}>
             <div className="form">
@@ -103,7 +112,9 @@ return <div className="create" >
                 <input type="checkbox" id="11" value='fodmap friendly' onClick={(e)=>hanledCheck(e)} />fodmap friendly
             </div>
             <br />
-           <button>Enviar Datos</button>
+            {loading?<p>{loading}</p>:null}
+           <button id='enviar' disabled={(errors.hasOwnProperty('name')||errors.hasOwnProperty('summary')||errors.hasOwnProperty('healthScore')) ?true:false}>Enviar Datos</button>
+          
         </form>
     </div>
 }

@@ -19,7 +19,7 @@ const {name}= req.query
           let resultado;
           //Se trae de la API
           
-          let api= await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=20`)
+          let api= await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=5`)
           api= api.data.results.map(receta=>{
               
                    return {
@@ -176,6 +176,7 @@ router.get('/diets',async function(req,res){
 router.get('*',function(req,res){
      res.send("Esta ruta no existe")
 })
+
 
 module.exports = router;
 
