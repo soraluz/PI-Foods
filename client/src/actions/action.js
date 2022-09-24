@@ -8,7 +8,7 @@ export function getAllRecipes(){
             type: 'GET_ALL_RECIPES',
             payload:data
         }))
-        .catch(e=>e=>dispatch(setStatus('No se encontraron registros')))
+        .catch(e=>dispatch(setStatus('No se encontraron registros')))
     }
 }
 

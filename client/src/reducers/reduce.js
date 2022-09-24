@@ -16,8 +16,8 @@ export default function reducer(state=initialState,action){
                 ...state,
                 recipes:action.payload,
                 filtro:action.payload,
-                busqueda:[],
-               ordenamiento:[],
+             //   busqueda:[],
+             //  ordenamiento:[],
                detail:{},
                 loading:false
             }
@@ -161,13 +161,13 @@ export default function reducer(state=initialState,action){
                 recipes:registro,
                 loading:'Receta creada correctamente'
             }
-        default: return state
-
+      
         case 'SET_STATUS':
             return{
                 ...state,
                 loading:action.payload
             }   
+        default: return state
 
     }
 
