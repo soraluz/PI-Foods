@@ -19,7 +19,7 @@ const {name}= req.query
           let resultado;
           //Se trae de la API
           
-          let api= await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
+          let api= await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=10`)
           api= api.data.results.map(receta=>{
               
                    return {
